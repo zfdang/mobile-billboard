@@ -3,17 +3,25 @@ package com.zfdang.mbb;
 import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowInsets;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -58,14 +66,81 @@ public class FullscreenActivity extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                mContentView.setSpeed(mContentView.getSpeed()+1);
-//                mContentView.setTypeface(typeface);
+                openSettingDialog();
             }
         });
 
         mContentView.start();
+    }
+
+    private void setFullScreenMode(Window window) {
+        //设置永不休眠模式
+        window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //隐藏系统工具栏方式一
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        //隐藏底部导航栏
+        View decorView = window.getDecorView();
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) {
+            decorView.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        }
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                View decorView = getWindow().getDecorView();
+                int uiState = decorView.getSystemUiVisibility();
+                if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) {
+                    if (uiState != View.GONE) decorView.setSystemUiVisibility(View.GONE);
+                } else if (Build.VERSION.SDK_INT >= 19) {
+                    if (uiState != (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN))
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                }
+            }
+        });
+    }
+
+    void openSettingDialog() {
+        // 加载布局
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.setting_dialog, null);
+        final EditText editText = (EditText) dialogView.findViewById(R.id.setting_value);
+
+        AlertDialog dialog = new AlertDialog.Builder(this) // 使用android.support.v7.app.AlertDialog
+                .setView(dialogView) // 设置布局
+                .setCancelable(false) // 设置点击空白处不关闭
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String text = editText.getText().toString();
+                        if (TextUtils.isEmpty(text)) { // 判断输入的内容是否为空
+//              setDialogIsShowing(dialog, false); // 设置不关闭
+                            Toast.makeText(FullscreenActivity.this, "内容不能为空", Toast.LENGTH_SHORT)
+                                    .show();
+                        } else {
+                            Toast.makeText(FullscreenActivity.this, text, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                }) // 设置确定按钮，并设置监听事件})
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//            setDialogIsShowing(dialog, true); // 设置关闭
+                    }
+                }) // 设置取消按钮，并设置监听事件
+                .create(); // 创建对话框
+
+        final Window window = dialog.getWindow();
+        setFullScreenMode(window);
+
+        dialog.show();
     }
 
     @Override
