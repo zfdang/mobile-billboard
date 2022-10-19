@@ -131,7 +131,7 @@ open class MarqueeTextView @JvmOverloads constructor(
 
     /**item间距，*/
     @Px
-    var textItemDistance = 50f
+    var textItemDistance = 60f
         set(value) {
             if (field == value) {
                 return

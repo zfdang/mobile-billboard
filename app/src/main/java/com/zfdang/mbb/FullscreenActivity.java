@@ -8,13 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -38,38 +36,54 @@ public class FullscreenActivity extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
 
-    private MarqueeTextView mContentView;
+    private MarqueeTextView mMarqueeTextView;
 
     private final Handler mHideHandler = new Handler(Looper.myLooper());
 
-    private ActivityFullscreenBinding binding;
+    private ActivityFullscreenBinding activityBinding;
 
-    private FloatingActionButton setting;
-    private Typeface typeface;
+    private FloatingActionButton btSetting;
+    private Setting mSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityFullscreenBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        activityBinding = ActivityFullscreenBinding.inflate(getLayoutInflater());
+        setContentView(activityBinding.getRoot());
 
-        mContentView = binding.fullscreenContent;
-        setting = binding.fabSetting;
-        typeface = Typeface.createFromAsset(getAssets(), "Ruthie.ttf");
+        mMarqueeTextView = activityBinding.fullscreenContent;
+        btSetting = activityBinding.fabSetting;
 
         // show billboard in landscape mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
         // add floating button for config page
-        setting.setOnClickListener(new View.OnClickListener() {
+        btSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openSettingDialog();
             }
         });
 
-        mContentView.start();
+        initSetting();
+        updateMarqueeTextView();
+    }
+
+    private void initSetting() {
+        mSetting = new Setting();
+        mSetting.text = getString(R.string.defaut_marquee_text);
+    }
+
+    private void updateMarqueeTextView() {
+        mMarqueeTextView.stop();
+        mMarqueeTextView.setText(mSetting.text);
+        mMarqueeTextView.setTextSize(mSetting.textSize);
+        mMarqueeTextView.setSpeed(mSetting.speed);
+        mMarqueeTextView.setTextColor(mSetting.textColor.toArgb());
+        mMarqueeTextView.setBackgroundColor(mSetting.bgColor.toArgb());
+        mMarqueeTextView.setRepeat(mSetting.loopMode);
+        mMarqueeTextView.start();
     }
 
     private void setFullScreenMode(Window window) {
@@ -113,30 +127,29 @@ public class FullscreenActivity extends AppCompatActivity {
         AlertDialog dialog = new AlertDialog.Builder(this) // 使用android.support.v7.app.AlertDialog
                 .setView(dialogBinding.getRoot()) // 设置布局
                 .setCancelable(false) // 设置点击空白处不关闭
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String text = etText.getText().toString();
                         if (TextUtils.isEmpty(text)) {
                             // 判断输入的内容是否为空
-                            Toast.makeText(FullscreenActivity.this, "内容不能为空", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(FullscreenActivity.this, R.string.alert_content_empty, Toast.LENGTH_SHORT).show();
                         } else {
-                            mContentView.setText(text);
+                            mMarqueeTextView.setText(text);
                         }
 
                         // enter full screen again
                         delayedSetFullScreen(100);
                     }
                 }) // 设置确定按钮，并设置监听事件})
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // enter full screen again
                         delayedSetFullScreen(100);
                     }
                 }) // 设置取消按钮，并设置监听事件
-                .setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.dialog_exit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                     }
@@ -185,13 +198,13 @@ public class FullscreenActivity extends AppCompatActivity {
         public void run() {
             // Delayed removal of status and navigation bar
             if (Build.VERSION.SDK_INT >= 30) {
-                mContentView.getWindowInsetsController().hide(
+                mMarqueeTextView.getWindowInsetsController().hide(
                         WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
             } else {
                 // Note that some of these constants are new as of API 16 (Jelly Bean)
                 // and API 19 (KitKat). It is safe to use them, as they are inlined
                 // at compile-time and do nothing on earlier devices.
-                mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                mMarqueeTextView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

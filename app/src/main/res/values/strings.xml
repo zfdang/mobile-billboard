@@ -13,4 +13,10 @@
     <string name="setting_scrolling_speed">滚动速度</string>
     <string name="setting_font_color">字体颜色</string>
     <string name="setting_bg_color">背景颜色</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_exit">退出</string>
+    <string name="alert_content_empty">内容不能为空</string>
+    <string name="defaut_marquee_text">滚动文字显示，请设置您需要的内容...</string>
+    <string name="text_hello">Hello</string>
 </resources>
