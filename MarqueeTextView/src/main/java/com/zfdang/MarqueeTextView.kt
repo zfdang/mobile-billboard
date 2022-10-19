@@ -55,19 +55,20 @@ open class MarqueeTextView @JvmOverloads constructor(
      */
     var text = ""
         set(value) {
-            if (field.isEmpty() && value.isEmpty()) {
+            if (value.isEmpty()) {
                 return
             }
             field = value
-            var targetContent = value
-            if (isResetLocation) { //控制重新设置文本内容的时候，是否初始化xLocation。
-                xLocation = width * startLocationDistance
+            var targetContent = value.trim()
+            if (isResetLocation) { // 控制重新设置文本内容的时候，是否初始化xLocation。
+                xLocation = width * leftMarginPercentage
             }
-            val itemEndBlank = getItemEndBlank()
-            if (!targetContent.endsWith(itemEndBlank)) {
-                targetContent += itemEndBlank //避免没有后缀, 补充空格位
-            }
-            //计算宽度，根据模式来
+
+            // 根据text之间的距离，补足空格
+            val endingBlanks = getEndingBlanks()
+            targetContent += endingBlanks
+
+            // 根据模式计算宽度
             if (repeat == REPEAT_FILL_LOOP) {
                 mFinalDrawText = ""
                 //计算文本的宽度
@@ -79,16 +80,16 @@ open class MarqueeTextView @JvmOverloads constructor(
                         mFinalDrawText += targetContent
                     }
                 }
-                contentWidth = getTextWidth(mFinalDrawText)
+                mContentWidth = getTextWidth(mFinalDrawText)
             } else {
                 if (xLocation < 0 && repeat == REPEAT_SINGLE) {
-                    if (abs(xLocation) > contentWidth) {
-                        xLocation = width * startLocationDistance
+                    if (abs(xLocation) > mContentWidth) {
+                        xLocation = width * leftMarginPercentage
                     }
                 }
                 mFinalDrawText = targetContent
-                contentWidth = getTextWidth(mFinalDrawText)
-                mSingleContentWidth = contentWidth
+                mContentWidth = getTextWidth(mFinalDrawText)
+                mSingleContentWidth = mContentWidth
             }
             textHeight = getTextHeight()
             invalidate()
@@ -121,6 +122,7 @@ open class MarqueeTextView @JvmOverloads constructor(
             if (value > 0 && value != field) {
                 field = value
                 textPaint.textSize = value
+                // call setText to reset
                 if (text.isNotEmpty()) {
                     text = text
                 }
@@ -135,6 +137,7 @@ open class MarqueeTextView @JvmOverloads constructor(
                 return
             }
             field = if (value < 0f) 0f else value
+            // call setText to reset
             if (text.isNotEmpty()) {
                 text = text
             }
@@ -148,6 +151,7 @@ open class MarqueeTextView @JvmOverloads constructor(
             if (value != field) {
                 field = value
                 resetInit = true
+                // call setText to reset
                 text = text
             }
         }
@@ -156,7 +160,7 @@ open class MarqueeTextView @JvmOverloads constructor(
      * 开始的位置距离左边，0~1，0:最左边，1:最右边，0.5:中间。
      */
     @FloatRange(from = 0.0, to = 1.0)
-    var startLocationDistance = 0.0f
+    var leftMarginPercentage = 0.0f
         set(value) {
             if (value == field) {
                 return
@@ -172,15 +176,14 @@ open class MarqueeTextView @JvmOverloads constructor(
      * 是否重置文本绘制的位置，默认为true
      */
     var isResetLocation = true
-    private var xLocation = 0f //文本的x坐标
 
-    /**
-     * 单个显示内容的宽度
-     */
+    private var xLocation = 0f // 文本的x坐标
+
+//    单个显示内容的宽度
     private var mSingleContentWidth: Float = 0f
 
-    /**内容的宽度*/
-    private var contentWidth = 0f
+    /** 最终绘制的内容的宽度 */
+    private var mContentWidth = 0f
 
     /**是否继续滚动*/
     var isRolling = false
@@ -208,15 +211,15 @@ open class MarqueeTextView @JvmOverloads constructor(
         super.onDraw(canvas)
         if (resetInit && text.isNotEmpty()) {
             textItemDistance = textItemDistance
-            xLocation = width * startLocationDistance
+            xLocation = width * leftMarginPercentage
             resetInit = false
         }
         val absLocation = abs(xLocation)
         when (repeat) {
-            REPEAT_SINGLE -> if (contentWidth < absLocation) {
+            REPEAT_SINGLE -> if (mContentWidth < absLocation) {
                 stop()
             }
-            REPEAT_SINGLE_LOOP -> if (contentWidth <= absLocation) {
+            REPEAT_SINGLE_LOOP -> if (mContentWidth <= absLocation) {
                 //一轮结束
                 xLocation = width.toFloat()
             }
@@ -224,7 +227,7 @@ open class MarqueeTextView @JvmOverloads constructor(
                 xLocation = mSingleContentWidth - absLocation
             }
             else ->
-                if (contentWidth < absLocation) {
+                if (mContentWidth < absLocation) {
                     //也就是说文字已经到头了
                     stop()
                 }
@@ -272,7 +275,7 @@ open class MarqueeTextView @JvmOverloads constructor(
         speed = a.getFloat(R.styleable.MarqueeTextView_marqueeSpeed, 1f)
         textSize = a.getDimension(R.styleable.MarqueeTextView_android_textSize, 12f)
         textItemDistance = a.getDimension(R.styleable.MarqueeTextView_marqueeItemDistance, 50f)
-        startLocationDistance = a.getFloat(
+        leftMarginPercentage = a.getFloat(
             R.styleable.MarqueeTextView_marqueeStartLocationDistance,
             0f
         )
@@ -363,7 +366,7 @@ open class MarqueeTextView @JvmOverloads constructor(
         return abs(fontMetrics.bottom - fontMetrics.top) / 2
     }
 
-    private fun getItemEndBlank(): String {
+    private fun getEndingBlanks(): String {
         val oneBlankWidth = getBlankWidth() //空格的宽度
         var count = 1
         if (textItemDistance > 0 && oneBlankWidth != 0f) {
