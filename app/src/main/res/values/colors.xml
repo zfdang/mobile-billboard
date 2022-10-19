@@ -12,4 +12,11 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+
+    <color name="color_gray">#C6B4B4</color>
+    <color name="color_red">#FF0000</color>
+    <color name="color_green">#00FF00</color>
+    <color name="color_blue">#007dff</color>
+    <color name="color_yellow">#FFFF00</color>
+    <color name="color_pink">#FF00FF</color>
 </resources>

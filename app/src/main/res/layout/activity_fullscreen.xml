@@ -28,10 +28,12 @@
         android:keepScreenOn="true"
         android:text="Kotlin 实现文本横向滚动，跑马灯效果"
         android:textColor="?attr/fullscreenTextColor"
+        android:background="@color/black"
         android:textSize="50sp"
         android:textStyle="bold"
         app:marqueeRepeat="fillLoop"
-        app:marqueeSpeed="30"
+        app:marqueeSpeed="5"
+        app:marqueeItemDistance="100dp"
         />
 
 </FrameLayout>

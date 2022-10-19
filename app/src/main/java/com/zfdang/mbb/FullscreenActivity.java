@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -24,7 +23,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.zfdang.MarqueeTextView;
 import com.zfdang.mbb.databinding.ActivityFullscreenBinding;
 
@@ -120,26 +118,28 @@ public class FullscreenActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String text = editText.getText().toString();
                         if (TextUtils.isEmpty(text)) { // 判断输入的内容是否为空
-//              setDialogIsShowing(dialog, false); // 设置不关闭
                             Toast.makeText(FullscreenActivity.this, "内容不能为空", Toast.LENGTH_SHORT)
                                     .show();
                         } else {
-                            Toast.makeText(FullscreenActivity.this, text, Toast.LENGTH_SHORT)
-                                    .show();
+                            mContentView.setText(text);
                         }
+
+                        // enter full screen again
+                        delayedSetFullScreen(100);
                     }
                 }) // 设置确定按钮，并设置监听事件})
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//            setDialogIsShowing(dialog, true); // 设置关闭
+
+                        // enter full screen again
+                        delayedSetFullScreen(100);
                     }
                 }) // 设置取消按钮，并设置监听事件
                 .create(); // 创建对话框
 
         final Window window = dialog.getWindow();
         setFullScreenMode(window);
-
         dialog.show();
     }
 
@@ -148,14 +148,14 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         // Trigger the initial hide() shortly after the activity has been created
-        delayedHide(100);
+        delayedSetFullScreen(100);
     }
 
     /**
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
      */
-    private void delayedHide(int delayMillis) {
+    private void delayedSetFullScreen(int delayMillis) {
         // mHideRunnable --> mHidePart2Runnable
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);

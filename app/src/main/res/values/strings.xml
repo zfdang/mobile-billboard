@@ -3,4 +3,14 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="setting">Setting</string>
+    <string name="setting_caption">配置</string>
+    <string name="setting_displayed_text">显示的内容</string>
+    <string name="setting_loop_mode">显示模式</string>
+    <string name="setting_loop_mode_single">单次显示</string>
+    <string name="setting_loop_mode_loop">循环显示</string>
+    <string name="setting_loop_mode_fill_loop">连续循环显示</string>
+    <string name="setting_text_size">字体大小</string>
+    <string name="setting_scrolling_speed">滚动速度</string>
+    <string name="setting_font_color">字体颜色</string>
+    <string name="setting_bg_color">背景颜色</string>
 </resources>

@@ -17,10 +17,10 @@
         <!--每个item之间的距离-->
         <attr name="marqueeItemDistance" format="dimension" />
         <!--开始的起始位置 按距离控件左边的百分比 0~1之间 -->
-        <attr name="marqueeStartLocationDistance" format="float" />
+        <attr name="marqueeLeftMarginPercentage" format="float" />
         <!--播放速度 也就是文字滚动速度-->
         <attr name="marqueeSpeed" format="float" />
-        <!--重新改变内容的时候 ， 是否初始化 位置，默认为true，改变-->
+        <!--重新改变内容的时候，是否初始化位置，默认为true，改变-->
         <attr name="marqueeResetLocation" format="boolean" />
     </declare-styleable>
 

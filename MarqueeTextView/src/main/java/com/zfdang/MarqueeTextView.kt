@@ -276,7 +276,7 @@ open class MarqueeTextView @JvmOverloads constructor(
         textSize = a.getDimension(R.styleable.MarqueeTextView_android_textSize, 12f)
         textItemDistance = a.getDimension(R.styleable.MarqueeTextView_marqueeItemDistance, 50f)
         leftMarginPercentage = a.getFloat(
-            R.styleable.MarqueeTextView_marqueeStartLocationDistance,
+            R.styleable.MarqueeTextView_marqueeLeftMarginPercentage,
             0f
         )
         repeat = a.getInt(R.styleable.MarqueeTextView_marqueeRepeat, REPEAT_SINGLE_LOOP)
