@@ -4,7 +4,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="setting">Setting</string>
     <string name="setting_caption">配置</string>
-    <string name="setting_displayed_text">显示的内容</string>
+    <string name="setting_displayed_text">显示内容</string>
     <string name="setting_loop_mode">显示模式</string>
     <string name="setting_loop_mode_single">单次显示</string>
     <string name="setting_loop_mode_loop">循环显示</string>

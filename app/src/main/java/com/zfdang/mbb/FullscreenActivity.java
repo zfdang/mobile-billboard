@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zfdang.MarqueeTextView;
 import com.zfdang.mbb.databinding.ActivityFullscreenBinding;
+import com.zfdang.mbb.databinding.SettingDialogBinding;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -106,20 +107,20 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     void openSettingDialog() {
-        // 加载布局
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.setting_dialog, null);
-        final EditText editText = (EditText) dialogView.findViewById(R.id.setting_value);
+        SettingDialogBinding dialogBinding = SettingDialogBinding.inflate(getLayoutInflater());
+        final EditText etText = dialogBinding.settingText;
 
         AlertDialog dialog = new AlertDialog.Builder(this) // 使用android.support.v7.app.AlertDialog
-                .setView(dialogView) // 设置布局
+                .setView(dialogBinding.getRoot()) // 设置布局
                 .setCancelable(false) // 设置点击空白处不关闭
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String text = editText.getText().toString();
-                        if (TextUtils.isEmpty(text)) { // 判断输入的内容是否为空
-                            Toast.makeText(FullscreenActivity.this, "内容不能为空", Toast.LENGTH_SHORT)
-                                    .show();
+                        String text = etText.getText().toString();
+                        if (TextUtils.isEmpty(text)) {
+                            // 判断输入的内容是否为空
+                            Toast.makeText(FullscreenActivity.this, "内容不能为空", Toast.LENGTH_SHORT).show();
+
                         } else {
                             mContentView.setText(text);
                         }
@@ -131,11 +132,15 @@ public class FullscreenActivity extends AppCompatActivity {
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         // enter full screen again
                         delayedSetFullScreen(100);
                     }
                 }) // 设置取消按钮，并设置监听事件
+                .setNeutralButton("退出", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                }) // 设置退出对话框
                 .create(); // 创建对话框
 
         final Window window = dialog.getWindow();
