@@ -15,7 +15,8 @@
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_setting"
         android:contentDescription="@string/setting"
-        android:layout_margin="8dp" />
+        app:fabSize="mini"
+        android:layout_margin="2dp" />
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
