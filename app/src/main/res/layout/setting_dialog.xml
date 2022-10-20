@@ -64,60 +64,10 @@
                     android:id="@+id/setting_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="flagNoExtractUi"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:minHeight="48dp"
                     tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="?android:attr/listDivider" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/setting_loop_mode"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:ignore="UselessParent">
-
-                    <RadioButton
-                        android:id="@+id/radioButton_single"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/setting_loop_mode_single" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton_loop"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/setting_loop_mode_loop" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton_fill_loop"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/setting_loop_mode_fill_loop" />
-                </RadioGroup>
             </LinearLayout>
 
             <View
@@ -156,7 +106,7 @@
                         android:id="@+id/seekBar_text_size"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:isb_max="1000"
+                        app:isb_max="4000"
                         app:isb_min="1"
                         app:isb_only_thumb_draggable="true"
                         app:isb_show_indicator="circular_bubble"
@@ -203,7 +153,7 @@
                         android:id="@+id/seekBar_speed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:isb_max="150"
+                        app:isb_max="160"
                         app:isb_min="0"
                         app:isb_only_thumb_draggable="true"
                         app:isb_show_indicator="rounded_rectangle"
@@ -327,15 +277,53 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_marginStart="10dp"
+                    android:text="@string/setting_loop_mode"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:ignore="UselessParent">
+
+                    <RadioButton
+                        android:id="@+id/radioButton_single"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_loop_mode_single"
+                        android:visibility="gone" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_loop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_loop_mode_loop" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_fill_loop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_loop_mode_fill_loop" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="?android:attr/listDivider" />
         </LinearLayout>
     </ScrollView>
 

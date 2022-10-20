@@ -13,11 +13,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -27,6 +31,8 @@ import com.skydoves.colorpickerview.ColorEnvelope;
 import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.OnSeekChangeListener;
+import com.warkiz.widget.SeekParams;
 import com.zfdang.MarqueeTextView;
 import com.zfdang.mbb.databinding.SettingDialogBinding;
 import com.zfdang.mbb.databinding.ActivityBillboardBinding;
@@ -36,10 +42,8 @@ import com.zfdang.mbb.databinding.ActivityBillboardBinding;
  * status bar and navigation/system bar) with user interaction.
  */
 public class BillboardActivity extends AppCompatActivity {
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
+    private static final String TAG = "BillboardActivity";
+
     private static final int UI_ANIMATION_DELAY = 300;
 
     private MarqueeTextView mMarqueeTextView;
@@ -158,15 +162,94 @@ public class BillboardActivity extends AppCompatActivity {
             @Override
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                 etTextColor.setText(envelope.getHexCode());
+                mMarqueeTextView.setTextColor(envelope.getColor());
             }
         });
         pickerBgColor.setColorListener(new ColorEnvelopeListener() {
             @Override
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                 etBgColor.setText(envelope.getHexCode());
+                mMarqueeTextView.setBackgroundColor(envelope.getColor());
             }
         });
 
+        // add listeners for seekbar
+        sbTextSize.setOnSeekChangeListener(new OnSeekChangeListener() {
+            @Override
+            public void onSeeking(SeekParams seekParams) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                mMarqueeTextView.setTextSize(seekBar.getProgress());
+            }
+        });
+        sbSpeed.setOnSeekChangeListener(new OnSeekChangeListener() {
+            @Override
+            public void onSeeking(SeekParams seekParams) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                mMarqueeTextView.setSpeed(seekBar.getProgress());
+            }
+        });
+
+        // set ratio button listeners
+        rbSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    mMarqueeTextView.setRepeat(Setting.LM_SINGLE);
+                }
+            }
+        });
+        rbLoop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    mMarqueeTextView.setRepeat(Setting.LM_LOOP);
+                }
+
+            }
+        });
+        rbFillLoop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    mMarqueeTextView.setRepeat(Setting.LM_FILL_LOOP);
+                }
+            }
+        });
+
+        etText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mMarqueeTextView.setText(editable.toString());
+            }
+        });
 
         AlertDialog dialog = new AlertDialog.Builder(this) // 使用android.support.v7.app.AlertDialog
                 .setView(dialogBinding.getRoot()) // 设置布局
@@ -194,6 +277,7 @@ public class BillboardActivity extends AppCompatActivity {
                         } else if(rbSingle.isChecked()) {
                             mSetting.loopMode = Setting.LM_SINGLE;
                         }
+
                         updateMarqueeTextView();
 
                         // enter full screen again
@@ -203,6 +287,9 @@ public class BillboardActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // reset all values by mSetting
+                        updateMarqueeTextView();
+
                         // enter full screen again
                         delayedSetFullScreen(100);
                     }
@@ -271,5 +358,4 @@ public class BillboardActivity extends AppCompatActivity {
             }
         }
     };
-
 }

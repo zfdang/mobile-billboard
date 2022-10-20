@@ -16,10 +16,10 @@ public class Setting {
     public int bgColor;
 
     public Setting() {
-        this.text = "Text";
+        this.text = "";
         this.loopMode = LM_FILL_LOOP;
         this.textSize = 800;
-        this.speed = 30;
+        this.speed = 15;
         this.textColor = Color.valueOf(1,0,0).toArgb();
         this.bgColor = Color.valueOf(0,0,0).toArgb();
     }
