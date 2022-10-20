@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Mobile Billboard</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="setting">Setting</string>
     <string name="setting_caption">配置</string>
     <string name="setting_displayed_text">显示内容</string>

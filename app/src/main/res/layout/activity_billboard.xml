@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/fullscreenBackgroundColor"
     android:theme="@style/ThemeOverlay.MobileBillboard.FullscreenContainer"
-    tools:context=".FullscreenActivity">
+    tools:context=".BillboardActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_setting"
@@ -21,7 +21,7 @@
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
     <com.zfdang.MarqueeTextView
-        android:id="@+id/fullscreen_content"
+        android:id="@+id/marquee_textview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

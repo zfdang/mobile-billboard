@@ -18,18 +18,23 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.skydoves.colorpickerview.ColorEnvelope;
+import com.skydoves.colorpickerview.ColorPickerView;
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
+import com.warkiz.widget.IndicatorSeekBar;
 import com.zfdang.MarqueeTextView;
-import com.zfdang.mbb.databinding.ActivityFullscreenBinding;
 import com.zfdang.mbb.databinding.SettingDialogBinding;
+import com.zfdang.mbb.databinding.ActivityBillboardBinding;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity {
+public class BillboardActivity extends AppCompatActivity {
     /**
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
@@ -40,7 +45,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private final Handler mHideHandler = new Handler(Looper.myLooper());
 
-    private ActivityFullscreenBinding activityBinding;
+    private ActivityBillboardBinding activityBinding;
 
     private FloatingActionButton btSetting;
     private Setting mSetting;
@@ -49,10 +54,10 @@ public class FullscreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activityBinding = ActivityFullscreenBinding.inflate(getLayoutInflater());
+        activityBinding = ActivityBillboardBinding.inflate(getLayoutInflater());
         setContentView(activityBinding.getRoot());
 
-        mMarqueeTextView = activityBinding.fullscreenContent;
+        mMarqueeTextView = activityBinding.marqueeTextview;
         btSetting = activityBinding.fabSetting;
 
         // show billboard in landscape mode
@@ -122,7 +127,40 @@ public class FullscreenActivity extends AppCompatActivity {
 
     void openSettingDialog() {
         SettingDialogBinding dialogBinding = SettingDialogBinding.inflate(getLayoutInflater());
+
+        // binding controls
         final EditText etText = dialogBinding.settingText;
+        final RadioButton rbSingle = dialogBinding.radioButtonSingle;
+        final RadioButton rbLoop = dialogBinding.radioButtonLoop;
+        final RadioButton rbFillLoop = dialogBinding.radioButtonFillLoop;
+        final IndicatorSeekBar sbTextSize = dialogBinding.seekBarTextSize;
+        final IndicatorSeekBar sbSpeed = dialogBinding.seekBarSpeed;
+        final EditText etTextColor = dialogBinding.settingTextColorValue;
+        final EditText etBgColor = dialogBinding.settingBgColorValue;
+
+        // show selected color value
+        final ColorPickerView pickerTextColor = dialogBinding.colorPickerViewText;
+        final ColorPickerView pickerBgColor = dialogBinding.colorPickerViewBg;
+        pickerTextColor.setColorListener(new ColorEnvelopeListener() {
+            @Override
+            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
+                etTextColor.setText(envelope.getHexCode());
+            }
+        });
+        pickerBgColor.setColorListener(new ColorEnvelopeListener() {
+            @Override
+            public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
+                etBgColor.setText(envelope.getHexCode());
+            }
+        });
+
+        // init dialog values from setting
+        etText.setText(mSetting.text);
+        rbSingle.setChecked(mSetting.loopMode == Setting.LM_SINGLE);
+        rbLoop.setChecked(mSetting.loopMode == Setting.LM_LOOP);
+        rbFillLoop.setChecked(mSetting.loopMode == Setting.LM_FILL_LOOP);
+        sbTextSize.setProgress(mSetting.textSize);
+        sbSpeed.setProgress(mSetting.speed);
 
         AlertDialog dialog = new AlertDialog.Builder(this) // 使用android.support.v7.app.AlertDialog
                 .setView(dialogBinding.getRoot()) // 设置布局
@@ -133,7 +171,7 @@ public class FullscreenActivity extends AppCompatActivity {
                         String text = etText.getText().toString();
                         if (TextUtils.isEmpty(text)) {
                             // 判断输入的内容是否为空
-                            Toast.makeText(FullscreenActivity.this, R.string.alert_content_empty, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BillboardActivity.this, R.string.alert_content_empty, Toast.LENGTH_SHORT).show();
                         } else {
                             mMarqueeTextView.setText(text);
                         }
