@@ -109,7 +109,7 @@
                         app:isb_max="4000"
                         app:isb_min="1"
                         app:isb_only_thumb_draggable="true"
-                        app:isb_show_indicator="circular_bubble"
+                        app:isb_show_indicator="rounded_rectangle"
                         app:isb_show_tick_text="true"
                         app:isb_thumb_drawable="@drawable/thumb"
                         app:isb_tick_count="2"
@@ -201,20 +201,34 @@
                         android:gravity="center"
                         android:inputType="text"
                         android:minHeight="48dp"
-                        android:text="#FF00FF"
                         tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
 
                 </LinearLayout>
 
                 <Space
-                    android:layout_width="30dp"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content" />
 
-                <com.skydoves.colorpickerview.ColorPickerView
-                    android:id="@+id/colorPickerView_text"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.skydoves.colorpickerview.ColorPickerView
+                        android:id="@+id/colorPickerView_text"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp" />
+
+                    <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+                        android:id="@+id/slidebar_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:borderColor_BrightnessSlider="@android:color/darker_gray"
+                        app:borderSize_BrightnessSlider="5"
+                        app:selector_BrightnessSlider="@drawable/wheel" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -252,19 +266,34 @@
                         android:enabled="false"
                         android:gravity="center"
                         android:inputType="text"
-                        android:text="#FF00FF"
                         tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
                 </LinearLayout>
 
                 <Space
-                    android:layout_width="30dp"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content" />
 
-                <com.skydoves.colorpickerview.ColorPickerView
-                    android:id="@+id/colorPickerView_bg"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.skydoves.colorpickerview.ColorPickerView
+                        android:id="@+id/colorPickerView_bg"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp" />
+
+                    <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
+                        android:id="@+id/slidebar_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:borderColor_BrightnessSlider="@android:color/darker_gray"
+                        app:borderSize_BrightnessSlider="5"
+                        app:selector_BrightnessSlider="@drawable/wheel" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

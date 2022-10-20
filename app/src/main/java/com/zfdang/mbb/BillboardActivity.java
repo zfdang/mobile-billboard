@@ -30,6 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.colorpickerview.ColorEnvelope;
 import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
+import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
@@ -141,8 +142,12 @@ public class BillboardActivity extends AppCompatActivity {
         final IndicatorSeekBar sbTextSize = dialogBinding.seekBarTextSize;
         final IndicatorSeekBar sbSpeed = dialogBinding.seekBarSpeed;
         final ColorPickerView pickerTextColor = dialogBinding.colorPickerViewText;
+        final BrightnessSlideBar brightnessSlideBarText = dialogBinding.slidebarText;
+        pickerTextColor.attachBrightnessSlider(brightnessSlideBarText);
         final EditText etTextColor = dialogBinding.settingTextColorValue;
         final ColorPickerView pickerBgColor = dialogBinding.colorPickerViewBg;
+        final BrightnessSlideBar brightnessSlideBarBg = dialogBinding.slidebarBg;
+        pickerBgColor.attachBrightnessSlider(brightnessSlideBarBg);
         final EditText etBgColor = dialogBinding.settingBgColorValue;
 
         // init dialog values from setting
