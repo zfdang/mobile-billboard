@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -85,8 +86,8 @@ public class BillboardActivity extends AppCompatActivity {
         mMarqueeTextView.setText(mSetting.text);
         mMarqueeTextView.setTextSize(mSetting.textSize);
         mMarqueeTextView.setSpeed(mSetting.speed);
-        mMarqueeTextView.setTextColor(mSetting.textColor.toArgb());
-        mMarqueeTextView.setBackgroundColor(mSetting.bgColor.toArgb());
+        mMarqueeTextView.setTextColor(mSetting.textColor);
+        mMarqueeTextView.setBackgroundColor(mSetting.bgColor);
         mMarqueeTextView.setRepeat(mSetting.loopMode);
         mMarqueeTextView.start();
     }
@@ -135,12 +136,24 @@ public class BillboardActivity extends AppCompatActivity {
         final RadioButton rbFillLoop = dialogBinding.radioButtonFillLoop;
         final IndicatorSeekBar sbTextSize = dialogBinding.seekBarTextSize;
         final IndicatorSeekBar sbSpeed = dialogBinding.seekBarSpeed;
+        final ColorPickerView pickerTextColor = dialogBinding.colorPickerViewText;
         final EditText etTextColor = dialogBinding.settingTextColorValue;
+        final ColorPickerView pickerBgColor = dialogBinding.colorPickerViewBg;
         final EditText etBgColor = dialogBinding.settingBgColorValue;
 
-        // show selected color value
-        final ColorPickerView pickerTextColor = dialogBinding.colorPickerViewText;
-        final ColorPickerView pickerBgColor = dialogBinding.colorPickerViewBg;
+        // init dialog values from setting
+        etText.setText(mSetting.text);
+        rbSingle.setChecked(mSetting.loopMode == Setting.LM_SINGLE);
+        rbLoop.setChecked(mSetting.loopMode == Setting.LM_LOOP);
+        rbFillLoop.setChecked(mSetting.loopMode == Setting.LM_FILL_LOOP);
+        sbTextSize.setProgress(mSetting.textSize);
+        sbSpeed.setProgress(mSetting.speed);
+        pickerTextColor.setInitialColor(mSetting.textColor);
+        etTextColor.setText(pickerTextColor.getColorEnvelope().getHexCode());
+        pickerBgColor.setInitialColor(mSetting.bgColor);
+        etBgColor.setText(pickerBgColor.getColorEnvelope().getHexCode());
+
+        // add color change listeners for color picker
         pickerTextColor.setColorListener(new ColorEnvelopeListener() {
             @Override
             public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
@@ -154,13 +167,6 @@ public class BillboardActivity extends AppCompatActivity {
             }
         });
 
-        // init dialog values from setting
-        etText.setText(mSetting.text);
-        rbSingle.setChecked(mSetting.loopMode == Setting.LM_SINGLE);
-        rbLoop.setChecked(mSetting.loopMode == Setting.LM_LOOP);
-        rbFillLoop.setChecked(mSetting.loopMode == Setting.LM_FILL_LOOP);
-        sbTextSize.setProgress(mSetting.textSize);
-        sbSpeed.setProgress(mSetting.speed);
 
         AlertDialog dialog = new AlertDialog.Builder(this) // 使用android.support.v7.app.AlertDialog
                 .setView(dialogBinding.getRoot()) // 设置布局
@@ -173,8 +179,22 @@ public class BillboardActivity extends AppCompatActivity {
                             // 判断输入的内容是否为空
                             Toast.makeText(BillboardActivity.this, R.string.alert_content_empty, Toast.LENGTH_SHORT).show();
                         } else {
-                            mMarqueeTextView.setText(text);
+                            mSetting.text = text;
                         }
+
+                        // save all settings
+                        mSetting.speed = sbSpeed.getProgress();
+                        mSetting.textSize = sbTextSize.getProgress();
+                        mSetting.textColor = pickerTextColor.getColor();
+                        mSetting.bgColor = pickerBgColor.getColor();
+                        if(rbFillLoop.isChecked()) {
+                            mSetting.loopMode = Setting.LM_FILL_LOOP;
+                        } else if(rbLoop.isChecked()) {
+                            mSetting.loopMode = Setting.LM_LOOP;
+                        } else if(rbSingle.isChecked()) {
+                            mSetting.loopMode = Setting.LM_SINGLE;
+                        }
+                        updateMarqueeTextView();
 
                         // enter full screen again
                         delayedSetFullScreen(100);

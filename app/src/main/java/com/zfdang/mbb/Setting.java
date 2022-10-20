@@ -12,15 +12,15 @@ public class Setting {
     public int loopMode;
     public int textSize;
     public int speed;
-    public Color textColor;
-    public Color bgColor;
+    public int textColor;
+    public int bgColor;
 
     public Setting() {
         this.text = "Text";
         this.loopMode = LM_FILL_LOOP;
         this.textSize = 800;
-        this.speed = 90;
-        this.textColor = Color.valueOf(1,0,0);
-        this.bgColor = Color.valueOf(0,0,0);
+        this.speed = 30;
+        this.textColor = Color.valueOf(1,0,0).toArgb();
+        this.bgColor = Color.valueOf(0,0,0).toArgb();
     }
 }
