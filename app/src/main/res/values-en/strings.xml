@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Mobile Billboard</string>
+    <string name="setting">Setting</string>
+    <string name="setting_caption">Setting</string>
+    <string name="setting_displayed_text">Text to Display</string>
+    <string name="setting_loop_mode">Loop Mode</string>
+    <string name="setting_loop_mode_single">Single</string>
+    <string name="setting_loop_mode_loop">Loop</string>
+    <string name="setting_loop_mode_fill_loop">Fill Loop</string>
+    <string name="setting_text_size">Text Size</string>
+    <string name="setting_scrolling_speed">Speed</string>
+    <string name="setting_font_color">Text Color</string>
+    <string name="setting_bg_color">Background Color</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_exit">Exit</string>
+    <string name="alert_content_empty">Text cannot be empty...</string>
+    <string name="defaut_marquee_text">Rolling Text...</string>
+</resources>

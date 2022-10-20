@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">手机广告牌</string>
+    <string name="setting">配置</string>
+    <string name="setting_caption">配置</string>
+    <string name="setting_displayed_text">显示内容</string>
+    <string name="setting_loop_mode">显示模式</string>
+    <string name="setting_loop_mode_single">单次显示</string>
+    <string name="setting_loop_mode_loop">循环显示</string>
+    <string name="setting_loop_mode_fill_loop">连续循环显示</string>
+    <string name="setting_text_size">字体大小</string>
+    <string name="setting_scrolling_speed">滚动速度</string>
+    <string name="setting_font_color">字体颜色</string>
+    <string name="setting_bg_color">背景颜色</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_exit">退出</string>
+    <string name="alert_content_empty">内容不能为空</string>
+    <string name="defaut_marquee_text">滚动显示的文字...</string>
+</resources>

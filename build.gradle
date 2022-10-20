@@ -5,7 +5,7 @@ buildscript {
         myKotlinVersion = "1.7.0" //String
         myMinSdkVersion = 26 //Integer
         myTargetSdkVersion = 32
-        myCompileSdkVersion = 32
+        myCompileSdkVersion = 33
     }
 }
 
