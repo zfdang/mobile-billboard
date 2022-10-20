@@ -29,15 +29,16 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("mbb.keystore")
+            storeFile file("billboard.keystore")
             storePassword "billboard"
-            keyAlias "mbb"
+            keyAlias "billboard"
             keyPassword "billboard"
         }
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -48,6 +49,23 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+
+    // Add this block and enable/disable the parameters as follows
+    bundle {
+        density {
+            // Different APKs are generated for devices with different screen densities; true by default.
+            enableSplit true
+        }
+        abi {
+            // Different APKs are generated for devices with different CPU architectures; true by default.
+            enableSplit true
+        }
+        language {
+            // This is disabled so that the App Bundle does NOT split the APK for each language.
+            // We're gonna use the same APK for all languages.
+            enableSplit true
+        }
     }
 
     // http://www.sollyu.com/android-apk-studio-generated-automatically-appends-a-version-number/
