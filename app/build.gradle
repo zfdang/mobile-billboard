@@ -3,6 +3,17 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+// http://www.race604.com/android-auto-version/
+// use git count as build number, as current date as build version
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy.MM.dd')
+    return formattedDate
+}
+def cmd = 'git rev-list HEAD --count'
+def gitVersion = cmd.execute().text.trim().toInteger() + 100
+def appVersion = getDate()
+
 android {
     compileSdk myCompileSdkVersion
 
@@ -10,10 +21,19 @@ android {
         applicationId "com.zfdang.mbb"
         minSdk myMinSdkVersion
         targetSdk myTargetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode gitVersion
+        versionName appVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("mbb.keystore")
+            storePassword "billboard"
+            keyAlias "mbb"
+            keyPassword "billboard"
+        }
     }
 
     buildTypes {
@@ -28,6 +48,17 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+
+    // http://www.sollyu.com/android-apk-studio-generated-automatically-appends-a-version-number/
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            if(buildType.name == "release") {
+                output.outputFileName = new File("mbb" + "-" + buildType.name + "-v" + defaultConfig.versionName + ".apk" );
+            } else {
+                output.outputFileName = new File("mbb" + "-" + buildType.name + "-v" + defaultConfig.versionName + ".apk" );
+            }
+        }
     }
 }
 
@@ -44,5 +75,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
 }
